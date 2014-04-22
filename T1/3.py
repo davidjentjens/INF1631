@@ -53,4 +53,27 @@ def print_tournament(t):
             print("  Game #%02d: %d vs %d" % (game+1, teams[0], teams[1]))
 
 if __name__ == '__main__':
-    print_tournament(tournament(3))
+    # Codigo usado para testar com diferentes valores de k
+    # Uso:
+    #   python 3.py k
+    #     k - valor de k
+    
+    from time import time
+    import sys
+
+    TIME_TRESHOLD = 5
+    EXEC_TRESHOLD = 5
+
+    k = int(sys.argv[1])
+
+    # Executa no minimo 3 vezes
+    # Executa no minimo por 5 segundos
+    start = time()
+    execs = 0
+    while not (execs > EXEC_TRESHOLD and time() - start > TIME_TRESHOLD):
+        execs += 1
+        tournament(k)
+    end = time()
+    elapsed = end - start
+
+    print("%d & %d & %.3f s & %.6f ms \\\\" % (k, execs, elapsed, 1000*elapsed/execs))

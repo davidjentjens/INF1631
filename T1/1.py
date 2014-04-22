@@ -9,7 +9,7 @@ def quo(x, y, k):
 if __name__ == '__main__':
     # Codigo usado para testar com diferentes valores de x, y, e k
     # Uso:
-    #   python ed1.py x y k n
+    #   python 1.py x y k
     #     x - valor de x
     #     y - valor de y
     #     k - valor de k
