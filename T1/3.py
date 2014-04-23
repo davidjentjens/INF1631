@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Implementacao do algoritmo
 # O retorno eh uma lista de rounds
 # Um round eh uma lista de jogos

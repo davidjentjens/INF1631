@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Implementacao do algoritmo
 def numbers(k, m):
 
