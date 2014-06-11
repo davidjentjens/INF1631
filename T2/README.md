@@ -2,6 +2,7 @@
 
 ```
 sudo easy_install python-graph-core
-sudo apt-get install libgv-python
+sudo pip install matplotlib
+sudo pip install networkx
 ```
 

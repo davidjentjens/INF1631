@@ -2,12 +2,13 @@
 
 from pygraph.classes.graph import graph
 from pygraph.algorithms.accessibility import connected_components
-from random import randrange
 
 def teo_2(g, k):
   # Salvaguarda
   if k > len(g.nodes()):
     raise ValueError('FORBIDDEN: K > |V|')
+  if k <= 0:
+    raise ValueError('FORBIDDEN: K <= 0')
 
   # Caso base
   if k == 1:
@@ -67,21 +68,51 @@ def _transform_cc(cc):
 
 
 if __name__ == '__main__':
-  g = graph()
-  n = 20
+  # Codigo usado para testar com diferentes valores de x, y, e k
+  # Uso:
+  #   python 2.py k arq.tsp
+  #     k - o parâmetro K do teorema
+  #     arq.tsp - arquivo contendo uma tupla (id, x, y) por linha
+       
+  import tsp_reader
+  import sys
+  from time import time
 
-  for i in range(1, n):
-    g.add_node(i)
-  for i in range(1, n):
-    for j in range(i, n):
-      g.add_edge((i, j), wt=randrange(1000))
+  EXECS_PER_LOOP = 1
+  TIME_THRESHOLD = 5
 
-  f = teo_2(g, 3)
+  k = int(sys.argv[1])
+  tsp_file = sys.argv[2]
+  tsp_str = open(tsp_file).read()
+  g = tsp_reader.read(tsp_str)
 
-  print "Edges"
-  print [(e[0], e[1], g.edge_weight(e)) for e in g.edges()]
+  if k == -1:
+    k = len(g.nodes())
+
+  if k > len(g.nodes()):
+    raise ValueError('FORBIDDEN: K > |V|')
+
+  # Executa EXECS_PER_LOOP vezes a cada vez, ate passar de TIME_THRESHOLD segundos
+  start = time()
+  execs = 0
+  while time() - start < TIME_THRESHOLD:
+      execs += EXECS_PER_LOOP
+      for i in range(EXECS_PER_LOOP):
+          f = teo_2(g, k)
+  end = time()
+  elapsed = end - start
+
+  print("k = %d" % k)
+  print("file = %s" % tsp_file)
+  print("time/exec = %.6f ms" % (1000*elapsed/execs))
   print
-  print "Forest"
-  print [(e[0], e[1], g.edge_weight(e)) for e in f.edges()] 
-  print "connected_components"
-  print _transform_cc(connected_components(f))
+
+  # print
+  # print
+  # print "Edges"
+  # print ', '.join(["(%d, %d, w=%d)" % (e[0], e[1], g.edge_weight(e)) for e in g.edges()])
+  # print
+  # print "Forest"
+  # print ', '.join(["(%d, %d, w=%d)" % (e[0], e[1], g.edge_weight(e)) for e in f.edges()])
+  # print "connected_components"
+  # print _transform_cc(connected_components(f))
