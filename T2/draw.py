@@ -22,6 +22,11 @@ for k in range(1, len(g.nodes())+1):
 
   n = nx.Graph()
 
+  print k
+  for edge in f.edges():
+    print "%d %d %d" % (edge[0], edge[1], g.edge_weight(edge))
+  print
+
   for node in f.nodes():
     n.add_node(node)
 

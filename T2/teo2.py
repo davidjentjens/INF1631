@@ -106,13 +106,3 @@ if __name__ == '__main__':
   print("file = %s" % tsp_file)
   print("time/exec = %.6f ms" % (1000*elapsed/execs))
   print
-
-  # print
-  # print
-  # print "Edges"
-  # print ', '.join(["(%d, %d, w=%d)" % (e[0], e[1], g.edge_weight(e)) for e in g.edges()])
-  # print
-  # print "Forest"
-  # print ', '.join(["(%d, %d, w=%d)" % (e[0], e[1], g.edge_weight(e)) for e in f.edges()])
-  # print "connected_components"
-  # print _transform_cc(connected_components(f))
