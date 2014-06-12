@@ -45,7 +45,7 @@ def teo_1(g, k):
 if __name__ == '__main__':
   # Codigo usado para testar com diferentes valores de x, y, e k
   # Uso:
-  #   python 2.py k arq.tsp
+  #   python teo1.py k arq.tsp
   #     k - o parâmetro K do teorema
   #     arq.tsp - arquivo contendo uma tupla (id, x, y) por linha
        

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-def teo_3(pos, costs, rewards, energy):
+def teo_3(costs, rewards, energy):
   # Salvaguarda
-  if pos < 0 or pos >= 64 or energy < 0:
-    raise ValueError("Invalid position/energy!!")
+  if energy < 0:
+    raise ValueError("Invalid energy!!")
 
   # Dict cujas chaves sao tuplas (posicao, energia) e cujos valores
   # sao tuplas contendo o premio maximo que o rei consegue coletar
@@ -67,17 +67,50 @@ def find_neighbors(pos):
 
 
 if __name__ == '__main__':
+  # Codigo usado para testar 
+  # Uso:
+  #   python 3.py
+
+  import sys
+  from time import time
+
+  EXECS_PER_LOOP = 100
+  TIME_THRESHOLD = 5
+
+  # Ler o arquivo de entrada
+  problems = []
   with open('walk.in') as f:
+
+    # Ler o 
     q = int(f.readline().strip())
     while q != 0:
       costs   = sum([map(int, f.readline().strip().split(' ')) for i in range(8)], [])
       rewards = sum([map(int, f.readline().strip().split(' ')) for i in range(8)], [])
 
-      solution = teo_3(0, costs, rewards, q)
-      print solution[0]
-      print solution[2]
-      print q
-      print ' '.join(str(x) for x in solution[1])
+      problems.append({'energy': q, 'costs': costs, 'rewards': rewards})
 
       # Next
       q = int(f.readline().strip())
+
+  # USED TO MEASURE TIME
+  # for n, problem in enumerate(problems):
+  #   # Executa EXECS_PER_LOOP vezes a cada vez, ate passar de TIME_THRESHOLD segundos
+  #   start = time()
+  #   execs = 0
+  #   while time() - start < TIME_THRESHOLD:
+  #       execs += EXECS_PER_LOOP
+  #       for i in range(EXECS_PER_LOOP):
+  #         solution = teo_3(problem['costs'], problem['rewards'], problem['energy'])
+  #   end = time()
+  #   elapsed = end - start
+
+  #   print("num = %d" % n)
+  #   print("time/exec = %.6f ms" % (1000*elapsed/execs))
+  #   print
+
+  for problem in problems:
+    solution = teo_3(problem['costs'], problem['rewards'], problem['energy'])
+    print solution[0]
+    print solution[2]
+    print q
+    print ' '.join(str(x) for x in solution[1])
