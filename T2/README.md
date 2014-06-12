@@ -10,3 +10,5 @@ sudo pip install networkx
 
 ## Executando
 
+Veja as instruções de execução dentro de cada arquivo Python,
+logo abaixo da linha `if __name__ == '__main__':`.
