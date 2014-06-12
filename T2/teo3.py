@@ -1,73 +1,83 @@
 # -*- coding: utf-8 -*-
 
-class Path:
-  def __init__(self, list, costs, rewards):
-    self.pos_list = list
-    self.cost = get_for_list(costs, list)
-    self.prize = get_for_list(rewards, list)
+def teo_3(pos, costs, rewards, energy):
+  # Salvaguarda
+  if pos < 0 or pos >= 64 or energy < 0:
+    raise ValueError("Invalid position/energy!!")
 
-  def __repr__(self):
-    return self.pos_list.__repr__()[:-1] + ", C=%d, P=%d]\n" % (self.cost, self.prize)
+  # Dict cujas chaves sao tuplas (posicao, energia) e cujos valores
+  # sao tuplas contendo o premio maximo que o rei consegue coletar
+  # comecando da posicao dada, com dada energia disponivel, e parando na 
+  # posicao 0 com 0 energia, e o caminho para tal
+  memo = {}
 
-  def last(self):
-    return self.pos_list[-1]
+  # Caso base -- q=0
+  memo[(0, 0)] = (0, [0])
+  for v in range(1, 64):
+    memo[(v, 0)] = None
 
-  def append_new(self, final, costs, rewards):
-    new_list = self.pos_list[:]
-    new_list.append(final)
-    return Path(new_list, costs, rewards)
+  # Hipotese indutiva e passo indutivo -- preencher a tabela
+  # Para cada coluna de energia
+  for q in range(1, energy+1):
+    # Para cada vertice nessa coluna
+    for v in range(64):
+      # custo_vizinho e a coluna em que vamos olhar
+      custo_vizinho = q - costs[v]
+      vizinhos = find_neighbors(v)
+      if custo_vizinho < 0:
+        memo[(v, q)] = None
+      else:
+        # Filtra as celulas -- somente se nao for impossivel (not None)
+        # e pega a tupla (premio, caminho) delas
+        tuplas = [memo[(vizinho, custo_vizinho)] for vizinho in vizinhos if not memo[(vizinho, custo_vizinho)] == None]
+        if len(tuplas) > 0:
+          # O melhor_vizinho e o que tem maior premio
+          melhor_vizinho = max(tuplas, key=lambda x: x[0])
+          # O novo_premio e o premio do melhor vizinho somado ao do vertice em questao
+          novo_premio = melhor_vizinho[0] + rewards[v]
+          # O novo_caminho e o caminho do melhor vizinho acrescido do vertice em questao
+          novo_caminho = melhor_vizinho[1][:] + [v]
+          memo[(v, q)] = (novo_premio, novo_caminho)
+        else:
+          memo[(v, q)] = None
+
+  # Com a tabela em maos, vamos encontrar o caminho comecando em 0
+  # que obtenha o maior premio possivel, utilizando qualquer quantidade
+  # de energia menor que a fornecida
+  maior = 0
+  for q in range(energy, -1, -1):
+    x = memo[(0, q)]
+    if x != None and x[0] > maior:
+      maior = x[0]
+      inst = x + (q,)
+  return inst
+
 
 def find_neighbors(pos):
-  naive = [(pos[0]-1, pos[1]-1), (pos[0]-1, pos[1]), (pos[0]-1, pos[1]+1),
-          (pos[0],   pos[1]-1),                     (pos[0],   pos[1]+1),
-          (pos[0]+1, pos[1]-1), (pos[0]+1, pos[1]), (pos[0]+1, pos[1]+1)]
-  return [n for n in naive if n[0]>=0 and n[1]>=0 and n[0]<8 and n[1]<8]
+  x = pos/8
+  y = pos%8
 
-def get(matr, pos):
-  return matr[pos[0]][pos[1]]
+  naive = [(x-1, y-1), (x-1, y), (x-1, y+1),
+           (x,   y-1),           (x,   y+1),
+           (x+1, y-1), (x+1, y), (x+1, y+1)]
+  filtered = [n for n in naive if n[0]>=0 and n[1]>=0 and n[0]<8 and n[1]<8]
 
-def get_for_list(matr, pos_list):
-  return sum([get(matr, pos) for pos in pos_list[1:]])
-
-def teo_3(pos, costs, rewards, q):
-  paths = {}
-
-  neighbors = find_neighbors(pos)
-  paths[0] = [Path([pos, neighbor], costs, rewards) for neighbor in neighbors if get(costs, neighbor) <= q]
-
-  k = 1
-  paths[1] = []
-
-  while len(paths[k-1]) != 0:
-    for path in paths[k-1]:
-      neighbors = find_neighbors(path.last())
-      useless = False
-      for neighbor in neighbors:
-        if (path.cost + get(costs, neighbor)) <= q:
-          useless = True
-          new_path = path.append_new(neighbor, costs, rewards)
-          paths[k].append(new_path)
-
-      if useless:
-        paths[k-1].remove(path)
-
-    print "k = %d" %k 
-    print paths[k]
-    if k == 20:
-      break
-
-    k = k + 1
-    paths[k] = []
+  return map(lambda pos: pos[0]*8+pos[1], filtered)
 
 
 
 if __name__ == '__main__':
   with open('walk.in') as f:
-    q = f.readline().strip()
-    while q != '0':
-      costs   = [map(int, f.readline().strip().split(' ')) for i in range(8)]
-      rewards = [map(int, f.readline().strip().split(' ')) for i in range(8)]
+    q = int(f.readline().strip())
+    while q != 0:
+      costs   = sum([map(int, f.readline().strip().split(' ')) for i in range(8)], [])
+      rewards = sum([map(int, f.readline().strip().split(' ')) for i in range(8)], [])
 
-      teo_3((0, 0), costs, rewards, q)
-      break
-      q = f.readline().strip()
+      solution = teo_3(0, costs, rewards, q)
+      print solution[0]
+      print solution[2]
+      print q
+      print ' '.join(str(x) for x in solution[1])
+
+      # Next
+      q = int(f.readline().strip())

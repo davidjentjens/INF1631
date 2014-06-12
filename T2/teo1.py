@@ -15,7 +15,7 @@ def teo_1(g, k):
     tree.add_node(1)
     return tree
 
-  # Hipótese indutiva
+  # Hipotese indutiva
   tree = teo_1(g, k-1)
 
   # V - V_k
@@ -23,7 +23,7 @@ def teo_1(g, k):
   used_nodes = tree.nodes()
   external_nodes = [node for node in all_nodes if node not in used_nodes]
 
-  # Conjunto F de arestas possíveis
+  # Conjunto F de arestas possiveis
   r = []
   for used_node in used_nodes:
     for external_node in external_nodes:

@@ -17,14 +17,14 @@ def teo_2(g, k):
       forest.add_node(node)
     return forest
 
-  # Hipótese indutiva
+  # Hipotese indutiva
   forest = teo_2(g, k-1)
 
   # Enquanto ainda houverem componentes conexos
-  # que não satisfazem a condição
+  # que nao satisfazem a condicao
   while True:
     # Atualiza a lista de componentes, pois pode ter
-    # mudado durante a adição
+    # mudado durante a adicao
     cc = _transform_cc(connected_components(forest))
     
     # Seleciona um que tenha comprimento < k
@@ -34,13 +34,13 @@ def teo_2(g, k):
         selected_component = component
         break
 
-    # Se não conseguiu selecionar, significa que todos
+    # Se nao conseguiu selecionar, significa que todos
     # satisfazem comprimento >= k, e podemos parar o while
     if selected_component == None:
       break
 
     # Caso haja um selecionado, selecionar a aresta de menor
-    # peso que tenha somente um dos vértices em selected_component
+    # peso que tenha somente um dos vertices em selected_component
     edges = g.edges()
     used_edges = forest.edges()
     unused_edges = [e for e in edges if e not in used_edges]
