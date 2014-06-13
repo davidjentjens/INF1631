@@ -4,16 +4,16 @@
 
 Projects for the Discrete Structures course at PUC-Rio.
 
-
-## Project 1
-
-We analyzed and proved 3 theorems. From these proofs we derived algorithms, which were then implemented in Python. 
+We analyzed and proved 3 theorems. From these proofs we derived algorithms, which were then implemented in Python.
 
 Finally, we measured the performance of the algorithms.
 
 We produced a report using LaTeX.
 
+## Project 1
+
+Numeric algorithms
 
 ## Project 2
 
-Pending.
+Graph algorithms
