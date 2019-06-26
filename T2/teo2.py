@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-
-from pygraph.classes.graph import graph
-from pygraph.algorithms.accessibility import connected_components
+from pygraph.classes.directed_graph import DirectedGraph
+from pygraph.functions import connected_components
 
 def teo_2(g, k):
   # Salvaguarda
@@ -12,9 +11,9 @@ def teo_2(g, k):
 
   # Caso base
   if k == 1:
-    forest = graph()
+    forest = DirectedGraph()
     for node in g.nodes():
-      forest.add_node(node)
+      forest.add(node)
     return forest
 
   # Hipotese indutiva
